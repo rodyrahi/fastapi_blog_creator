@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form method="post">
+        <label>Title:</label><br>
+        <input type="text" name="title"><br><br>
+        <div id="editor">
+            <textarea style="display:none;" name="content"></textarea>
+        </div>
+        <br>
+        <button type="submit">Save</button>
+    </form>
+
+    <script>
+        var editor = editormd("editor", {
+            width: "90%",
+            height: 500,
+            path : "/static/editor.md/lib/" ,
+            imageUpload       : true,
+            imageFormats : ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+            imageUploadURL : "./php/upload.php?test=dfdf",
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>{{ blog.title }}</h2>
+
+  <!-- Editor.md CSS -->
+  <link rel="stylesheet" href="/static/editor.md/css/editormd.preview.css" />
+  <link rel="stylesheet" href="/static/editor.md/css/editormd.css" />
+
+  <!-- Container -->
+  <div id="markdown-view" class="markdown-body" style="min-height: 200px;"></div>
+
+  <!-- Editor.md + dependencies -->
+  <script src="/static/editor.md/lib/marked.min.js"></script>
+  <script src="/static/editor.md/lib/prettify.min.js"></script>
+  <script src="/static/editor.md/editormd.min.js"></script>
+
+  <script>
+    var markdownContent = {{ content | tojson }};
+
+    editormd.markdownToHTML("markdown-view", {
+      markdown: markdownContent,
+      htmlDecode: "style,script,iframe",  // Allow HTML tags if needed
+      toc: true,                          // Table of contents
+      tocm: true,                         // TOC container
+      emoji: true,
+      taskList: true,
+      tex: true,                          // LaTeX support
+      flowChart: true,
+      sequenceDiagram: true
+    });
+  </script>
+{% endblock %}
