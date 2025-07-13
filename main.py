@@ -72,3 +72,10 @@ def view_blog(blog_id: int, request: Request, db: Session = Depends(get_db)):
     return templates.TemplateResponse(
         "view.html", {"request": request, "blog": blog, "content": content}
     )
+    
+    
+
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8011)
