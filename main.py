@@ -1,8 +1,9 @@
-from fastapi import FastAPI, Request, Form, Depends
+from fastapi import FastAPI, Request, Form, Depends, Response
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-
+from starlette.status import HTTP_401_UNAUTHORIZED
+import base64
 import os
 
 from sqlalchemy.orm import Session
@@ -12,6 +13,36 @@ from models import Base, Blog
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
+
+
+USERNAME = "admin"
+PASSWORD = "secret"
+
+
+@app.middleware("http")
+async def basic_auth_middleware(request: Request, call_next):
+    # Skip auth for docs or root if you want
+    if request.url.path in ["/docs", "/openapi.json"]:
+        return await call_next(request)
+
+    auth = request.headers.get("Authorization")
+    if auth:
+        try:
+            scheme, credentials = auth.split()
+            if scheme.lower() == "basic":
+                decoded = base64.b64decode(credentials).decode("utf-8")
+                username, password = decoded.split(":")
+                if username == USERNAME and password == PASSWORD:
+                    return await call_next(request)
+        except Exception:
+            pass
+
+    return Response(
+        content="Unauthorized",
+        status_code=HTTP_401_UNAUTHORIZED,
+        headers={"WWW-Authenticate": "Basic"},
+    )
+
 
 app.mount("/static", StaticFiles(directory="static"), name="static")
 templates = Jinja2Templates(directory="templates")
