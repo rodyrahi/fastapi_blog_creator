@@ -15,8 +15,8 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 
-USERNAME = "admin"
-PASSWORD = "secret"
+USERNAME = "raj@69"
+PASSWORD = "kamingo@69"
 
 
 @app.middleware("http")
