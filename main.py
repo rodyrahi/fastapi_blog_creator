@@ -80,7 +80,7 @@ def create_post(
     with open(filepath, "w", encoding="utf-8") as f:
         f.write(content)
 
-    blog = Blog(title=title, filename=filename)
+    blog = Blog(title=title.lower(), filename=filename)
     db.add(blog)
     db.commit()
     return RedirectResponse(url="/", status_code=303)
